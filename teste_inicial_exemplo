@@ -1,0 +1,103 @@
+import { HeaderService, IChangeBackUrl, IChangeGoToIcons } from './header.service';
+
+describe('HeaderService', () => {
+  let headerService: HeaderService;
+
+  beforeEach(() => {
+    headerService = new HeaderService();
+  });
+
+  it('should be created', () => {
+    expect(headerService).toBeTruthy();
+  });
+
+  describe('changeGoBack', () => {
+    it('should emit the given back URL to subscribers', () => {
+      const backUrl: IChangeBackUrl = {
+        backToNative: true,
+        backUrl: '/previous-page',
+        unstack: false,
+      };
+      let emittedUrl: IChangeBackUrl | undefined;
+
+      headerService.backUrl.subscribe((url) => (emittedUrl = url));
+
+      headerService.changeGoBack(backUrl.backToNative, backUrl.backUrl, backUrl.unstack);
+
+      expect(emittedUrl).toEqual(backUrl);
+    });
+  });
+
+  describe('changeGoToIcons', () => {
+    it('should emit the given list of icons to subscribers', () => {
+      const icons: IChangeGoToIcons[] = [
+        { page: '/page1', icon: true },
+        { page: '/page2', icon: false },
+      ];
+      let emittedIcons: IChangeGoToIcons[] | undefined;
+
+      headerService.listaIcon.subscribe((icons) => (emittedIcons = icons));
+
+      headerService.changeGoToIcons(icons);
+
+      expect(emittedIcons).toEqual(icons);
+    });
+  });
+
+  describe('changeIconsToFaq', () => {
+    it('should emit an array with a single icon for the FAQ page to subscribers', () => {
+      const faqIcon: IChangeGoToIcons[] = [
+        {
+          page: '/faq-questions',
+          icon: 'ajuda_outline',
+        },
+      ];
+      let emittedIcons: IChangeGoToIcons[] | undefined;
+
+      headerService.listaIcon.subscribe((icons) => (emittedIcons = icons));
+
+      headerService.changeIconsToFaq();
+
+      expect(emittedIcons).toEqual(faqIcon);
+    });
+  });
+
+  describe('changeGoToText', () => {
+    it('should set the pageGoTo and titleGoTo properties', () => {
+      const pageGoTo = '/new-page';
+      const title = 'New Page';
+      headerService.changeGoToText(pageGoTo, title);
+
+      expect(headerService.pageGoTo).toEqual(pageGoTo);
+      expect(headerService.titleGoTo).toEqual(title);
+    });
+  });
+
+  describe('changeGoToIcon1', () => {
+    it('should set the pageGoTo and iconGoTo1 properties', () => {
+      const pageGoTo = '/new-page';
+      const icon = 'new-icon';
+      headerService.changeGoToIcon1(pageGoTo, icon);
+
+      expect(headerService.pageGoTo).toEqual(pageGoTo);
+      expect(headerService.iconGoTo1).toEqual(icon);
+    });
+  });
+
+  describe('changeGoToIcon2', () => {
+    it('should set the pageGoTo2 and iconGoTo2 properties', () => {
+      const pageGoTo = '/new-page';
+      const icon = 'new-icon';
+      headerService.changeGoToIcon2(pageGoTo, icon);
+
+      expect(headerService.pageGoTo2).toEqual(pageGoTo);
+      expect(headerService.iconGoTo2).toEqual(icon);
+    });
+  });
+
+  it('should change background color', () => {
+    const testColor = 1;
+    service.changeBackground(testColor);
+    expect(service.backgroudColor).toBe(testColor);
+  });
+});
